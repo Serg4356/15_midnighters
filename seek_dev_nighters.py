@@ -4,16 +4,17 @@ import pytz
 
 
 def load_attempts():
+    proceed_loading = True
     page = 1
-    while page <= int(requests.get(
-        'https://devman.org/api/challenges/solution_attempts'
-    ).json()['number_of_pages']):
-        page_response = requests.get(
+    while proceed_loading:
+        api_response = requests.get(
             'https://devman.org/api/challenges/solution_attempts',
             params={'page': page}
         ).json()
+        if page >= api_response['number_of_pages']:
+            proceed_loading = False
         page += 1
-        for record in page_response['records']:
+        for record in api_response['records']:
             yield {
                 'username': record['username'],
                 'timestamp': record['timestamp'],
@@ -21,11 +22,11 @@ def load_attempts():
             }
 
 
-def get_midnighters():
+def get_midnighters(attempts):
     midnight = 0
-    morning = 0
+    morning = 5
     midnighters = set()
-    for attempt in load_attempts():
+    for attempt in attempts:
         hour_of_attempt = timestamp_to_timedate(attempt['timestamp'], attempt['timezone'])
         if midnight <= hour_of_attempt <= morning:
             midnighters.add(attempt['username'])
@@ -36,10 +37,10 @@ def timestamp_to_timedate(timestamp, user_timezone):
     return datetime.datetime.fromtimestamp(
         timestamp,
         tz=pytz.timezone(user_timezone)
-    ).astimezone(pytz.timezone('Europe/Moscow')).hour
+    ).hour
 
 
 if __name__ == '__main__':
     print('Midnighters:')
-    for midnighter in get_midnighters():
+    for midnighter in get_midnighters(load_attempts()):
         print(midnighter)
