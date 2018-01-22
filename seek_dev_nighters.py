@@ -4,15 +4,14 @@ import pytz
 
 
 def load_attempts():
-    proceed_loading = True
     page = 1
-    while proceed_loading:
+    while True:
         api_response = requests.get(
             'https://devman.org/api/challenges/solution_attempts',
             params={'page': page}
         ).json()
         if page >= api_response['number_of_pages']:
-            proceed_loading = False
+            break
         page += 1
         for record in api_response['records']:
             yield {
@@ -33,7 +32,7 @@ def get_midnighters(attempts):
     return midnighters
 
 
-def timestamp_to_timedate(timestamp, user_timezone):
+def timestamp_to_hours(timestamp, user_timezone):
     return datetime.datetime.fromtimestamp(
         timestamp,
         tz=pytz.timezone(user_timezone)
