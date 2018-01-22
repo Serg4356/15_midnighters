@@ -26,7 +26,7 @@ def get_midnighters(attempts):
     morning = 5
     midnighters = set()
     for attempt in attempts:
-        hour_of_attempt = timestamp_to_timedate(attempt['timestamp'], attempt['timezone'])
+        hour_of_attempt = timestamp_to_hours(attempt['timestamp'], attempt['timezone'])
         if midnight <= hour_of_attempt <= morning:
             midnighters.add(attempt['username'])
     return midnighters
