@@ -1,6 +1,22 @@
 # Night Owls Detector
 
-[TODO. There will be project description]
+Programm searches with [devman.org](https://devman.org/) API for user's time of loading attempt of task solving, and displays it in console.
+
+# Quickstart
+
+Example of programm output:
+
+```bash
+$ python seek_dev_nighters.py
+Midnighters:
+LucasBackender
+id357826325
+RomanGagarin
+elena_barnz
+IvanKumeyko
+karandasov
+inkpie
+```
 
 # Project Goals
 
