@@ -10,9 +10,9 @@ def load_attempts():
             'https://devman.org/api/challenges/solution_attempts',
             params={'page': page}
         ).json()
-        if page >= api_response['number_of_pages']:
-            break
         page += 1
+        if page > api_response['number_of_pages']:
+            break
         for record in api_response['records']:
             yield {
                 'username': record['username'],
